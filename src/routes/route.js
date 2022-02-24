@@ -80,6 +80,61 @@ router.post("/post-query-2", function (req, res) {
 
 
 
+let persons= [
+    {
+    name: "PK",
+    age: 10,
+    votingStatus: false
+ },
+ {
+    name: "SK",
+    age: 20,
+    votingStatus: false
+ },
+ {
+    name: "AA",
+    age: 70,
+    votingStatus: false
+ },
+ {
+    name: "SC",
+    age: 5,
+    votingStatus: false
+ },
+ {
+    name: "HO",
+    age: 40,
+    votingStatus: false
+ }
+ ]
+ 
+router.post("/persons/:votingAge", function (req, res) {
+    //CODE HERE
+    let age= req.params.votingAge
+    let eligiblePerson= []
+    
+    // let isVotingStatus =true
+    for (let i=0; i<persons.length ; i++){
+            if (age>= 18 ){
+                persons.votingStatus[i]=true
+//                     //   isVotingStatus=true
+                            // votingStatus:true 
+                     eligiblePerson.push(persons[i])
+
+            }else{
+                     return res.send("person not present")    
+            }   
+    }
+
+//     // let finalArr= myArr.filter( ele => ele > input)
+//     // let finalArr=[]
+//     // for (i=0 ; i<myArr.length; i++) {
+//     //     if ( myArr[i] > input )      finalArr.push(myArr[i]) 
+//     // }
+    console.log(eligiblePerson);
+    return res.send({ eligiblePerson })
+})
+
 
 
 module.exports = router;
