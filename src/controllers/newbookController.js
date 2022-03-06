@@ -5,8 +5,8 @@ const publisherModel = require("../models/publisherModel")
 
 const createBook= async function (req, res) {
     let book = req.body
-    let authorId = book.author
-    let publisherId = book.publisher
+    let authorId =req.body.author
+    let publisherId = req.body.publisher
 
 
     if(!authorId) return res.send('The request is not valid as the author details are required.')
@@ -29,5 +29,31 @@ const getBooks= async function (req, res) {
 }
 
 
+const updateBooks = async function (req, res) {
+    // 5. a)
+    let hardCoverPublishers = await publisherModel.find({
+      name: { $in: ["Penguin", "HarperCollins"] },
+    });
+    let publisherIds = hardCoverPublishers.map((p) => p._id); //publisherIds is an array of publisher _id values
+  
+    await bookModel.updateMany(
+      { publisher: { $in: publisherIds } },
+      { isHardCover: true }
+    );
+  
+    // 5. b)
+    let highRatedAuthors = await authorModel.find({ rating: { $gt: 3.5 } });
+    let authorIds = highRatedAuthors.map((a) => a._id);
+  
+    await bookModel.updateMany(
+      { author: { $in: authorIds } },
+      { $inc: { price: 10 } }
+    );
+  
+    let updatedBooks = await bookModel.find();
+    res.send({ updatedBookCollection: updatedBooks });
+  };
+
 module.exports.createBook= createBook
 module.exports.getBooks= getBooks
+module.exports.updateBooks= updateBooks
