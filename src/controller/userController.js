@@ -117,17 +117,24 @@ const userLogin = async function (req, res) {
             return res.status(404).send({ status: false, ERROR: "User not  found" })
         }
 
-        const token = jwt.sign({
-            userId: data.email._id,
-        },
-            "project3group17",
-            { expiresIn: '300s' })
+        // const token = jwt.sign({
+        //     userId: data.email._id,
+        // },
+        //     "project3group17",
+        //     { expiresIn: '1hr' })
+        const userID = user._id        
+        const payLoad = {userId : userID }
+        const secretKey = "group17project3almostdone"
 
-        res.status(200).setHeader("group17", token)
-        return res.status(200).send({ status: true, message: "SuccessFully LoggedIn", TOKEN: token })
+       // creating JWT
+        const token = jwt.sign(payLoad, secretKey,  {expiresIn : "1hr"})
+        
+        res.header("group17", token)
+
+        res.status(200).send({status: true, message: "login successful" , data: token})
 
     } catch (err) {
-        res.status(500).send({ status: false, ERROR: err.message })
+       return res.status(500).send({ status: false, ERROR: err.message })
     }
 }
 

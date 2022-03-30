@@ -5,22 +5,30 @@ const router = express.Router();
 const userController = require("../controller/userController")
 const bookController = require("../controller/bookController")
 const reviewController = require("../controller/reviewController")
+const authController = require("../middleWare/auth.js")
 
 router.post("/register", userController.createUser)
 
 router.post("/login",userController.userLogin )
 
-router.post("/books",bookController.createBook)
+router.post("/books",authController.authenticate,bookController.createBook)
 
-router.get("/books",bookController.getBook)
+router.get("/books",authController.authenticate,bookController.getBook)
 
-router.get("/books/:bookId",bookController.bookById)
+router.get("/books/:bookId",authController.authenticate, bookController.bookById)
 
-router.put("/books/:bookId",bookController.updateBook)
+router.put("/books/:bookId",authController.authenticate,authController.authorise,bookController.updateBook)
 
-router.delete("/books/:bookId",bookController.deleteBookById)
+router.delete("/books/:bookId",authController.authenticate,authController.authorise,bookController.deleteBookById)
+
+
+//review api
 
 router.post("/books/:bookId/review", reviewController.createReview )
+
+router.put("/books/:bookId/review/:reviewId", reviewController.updateReview )
+
+router.delete("/books/:bookId/review/:reviewId", reviewController.deleteReview)
 
 module.exports = router;
 //adding this comment for nothing
