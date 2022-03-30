@@ -1,8 +1,11 @@
 const userModel = require('../models/userModel')
 const bookModel = require('../models/bookModel')
 const mongoose = require('mongoose')
+const reviewModel = require('../models/reviewModel')
 // const { response } = require('express')
 // const { findById } = require('../models/userModel')
+
+
 
 const isValid = function (value) {
     if (typeof value == undefined || value == null) return false
@@ -17,7 +20,12 @@ const isValidDate = (date) => {
     const today = new Date().setHours(0, 0, 0, 0);
     return specificDate < today;
 }
+const isValidobjectId = (objectId) => {
+    return mongoose.Types.ObjectId.isValid(objectId.trim())
+}
 
+
+//................................createBook...........................................
 const createBook = async function (req, res) {
     try {
         const data = req.body
@@ -88,9 +96,12 @@ const createBook = async function (req, res) {
     }
 }
 
+//.............................................get book...............................
+
 
 const getBook = async function (req, res) {
     try {
+        
         const data = req.body
         const query = req.query
         const filter = { isDeleted: false }
@@ -102,12 +113,22 @@ const getBook = async function (req, res) {
         if (isValidRequestBody(query)) {
             const { userId, category, subcategory } = query
 
-            if (isValid(userId)) {
-                const userid = await bookModel.find({ userId })
-                if (userid) { filter['userId'] = userId }
-
-
+            if(req.query.userId){
+                if(!(isValid(req.query.userId) && isValidobjectId(req.query.userId))){
+                    return res.status(400).send({ status: false, error: 'userId not valid' })
+                    
+                }
+                 filter['userId'] = req.query.userId 
             }
+            
+
+            // if (isValid(userId)) {
+            //     const userid = await bookModel.find({ userId })
+                
+                
+
+
+            // }
 
             if (isValid(category)) {
                 const cateogrised = await bookModel.find({ category })
@@ -141,12 +162,22 @@ const getBook = async function (req, res) {
     catch (err) { return res.status(500).send({ status: false, error: err.message }) }
 }
 
+
+//.........................book By iD.............................................................
+
+
 const bookById = async function (req, res) {
     try {
+        
+        
         let bookId = req.params.bookId;
+
+        const reviewData = await reviewModel.find({bookId:bookId,isDeleted:false})
+       
+
         const book = await bookModel
-            .findOne({ _id: bookId, isDeleted: false })
-            .select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1, reviewsData: [] });
+            .findOne({ bookId, isDeleted: false })
+            .select({ bookId: 1, title: 1, excerpt: 1, userId: 1, category: 1,reviews:reviewData.length, releasedAt: 1, reviewsData:reviewData });
 
         if (!book) {
             return res.status(400).send({ status: false, msg: "Book you are looking for has already been deleted" })
@@ -160,6 +191,12 @@ const bookById = async function (req, res) {
         return res.status(500).send({ status: false, error: err.message })
     }
 }
+
+
+
+
+//............................................updateBook by Id...............................
+
 
 const updateBook = async function (req, res) {
     try {
@@ -223,6 +260,10 @@ const updateBook = async function (req, res) {
     }
 
 }
+
+
+//.....................................deleteBook By.........................................
+
 
 let deleteBookById = async function (req, res) {
 
