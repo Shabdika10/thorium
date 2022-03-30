@@ -2,9 +2,7 @@ const userModel = require('../models/userModel')
 const bookModel = require('../models/bookModel')
 const mongoose = require('mongoose')
 const reviewModel = require('../models/reviewModel')
-// const { response } = require('express')
-// const { findById } = require('../models/userModel')
-//const middleWare = require("../middleWare/auth")
+
 
 
 const isValid = function (value) {
