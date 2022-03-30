@@ -1,6 +1,8 @@
 const userModel = require("../models/userModel")
 const jwt = require("jsonwebtoken")
 
+// ...........................Function for Validaion..................................
+
 const isValid = function (value) {
     if (typeof value == undefined || value == null) return false
     if (typeof value === 'string' && value.trim().length === 0) return false
@@ -15,7 +17,7 @@ const isvalidTitle = function (title) {
 }
 
 
-// createUser.....................................................................
+//  .............................first Api createUser.....................................................................
 
 const createUser = async function (req, res) {
 
@@ -89,7 +91,7 @@ const createUser = async function (req, res) {
     }
 }
 
-// user login..............................................................................
+// .................................second Api user login..............................................................................
 
 const userLogin = async function (req, res) {
 
@@ -122,19 +124,20 @@ const userLogin = async function (req, res) {
         // },
         //     "project3group17",
         //     { expiresIn: '1hr' })
-        const userID = user._id        
-        const payLoad = {userId : userID }
+        const userID = user._id
+        const payLoad = { userId: userID }
         const secretKey = "group17project3almostdone"
 
-       // creating JWT
-        const token = jwt.sign(payLoad, secretKey,  {expiresIn : "1hr"})
-        
+        // creating JWT
+
+        const token = jwt.sign(payLoad, secretKey, { expiresIn: "1hr" })
+
         res.header("group17", token)
 
-        res.status(200).send({status: true, message: "login successful" , data: token})
+        res.status(200).send({ status: true, message: "login successful", data: token })
 
     } catch (err) {
-       return res.status(500).send({ status: false, ERROR: err.message })
+        return res.status(500).send({ status: false, ERROR: err.message })
     }
 }
 

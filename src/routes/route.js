@@ -7,9 +7,13 @@ const bookController = require("../controller/bookController")
 const reviewController = require("../controller/reviewController")
 const authController = require("../middleWare/auth.js")
 
+// ...................User Api..................
+
 router.post("/register", userController.createUser)
 
 router.post("/login",userController.userLogin )
+
+// ...................Book Api..............................
 
 router.post("/books",authController.authenticate,bookController.createBook)
 
@@ -22,7 +26,7 @@ router.put("/books/:bookId",authController.authenticate,authController.authorise
 router.delete("/books/:bookId",authController.authenticate,authController.authorise,bookController.deleteBookById)
 
 
-//review api
+//.............................review api.....................................
 
 router.post("/books/:bookId/review", reviewController.createReview )
 
