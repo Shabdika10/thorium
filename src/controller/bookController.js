@@ -196,7 +196,7 @@ const bookById = async function (req, res) {
 
         const book = await bookModel
             .findOne({ bookId, isDeleted: false })
-            .select({ bookId: 1, title: 1, excerpt: 1, userId: 1, category: 1, reviews: reviewData.length, releasedAt: 1, reviewsData: reviewData });
+            .select({ bookId: 1, title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1, reviewsData: reviewData });
 
         if (!book) {
             return res.status(400).send({ status: false, msg: "Book you are looking for has already been deleted" })
