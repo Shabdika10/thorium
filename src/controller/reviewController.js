@@ -24,6 +24,7 @@ const isValid = function (value) {
     return true;
 }
 
+// ....................eigth Api Create Review..............................................................
 
 const createReview = async function (req, res) {
     let data = req.body
@@ -40,9 +41,8 @@ const createReview = async function (req, res) {
 
 
     const checkBookId = await bookModel.findOne({ _id: bookId, isDeleted: false })
-    if (!checkBookId) res.status(400).send({ status: false, message: "bookId not found" })
+    if (!checkBookId) res.status(404).send({ status: false, message: "bookId not found" })
 
-    //if(!isValid(data.reviewedBy)){return res.status(400).send({status: false, message:"reviewedBy is required"})}
     if (!isValidDate(data.reviewedAt)) { return res.status(400).send({ status: false, message: "reviewedAt is required" }) }
     if (!isValid(data.rating)) { return res.status(400).send({ status: false, message: "rating is required" }) }
     if (!(/^[1-5]$/.test(data.rating))) { return res.status(400).send({ status: false, message: "please enter rating between 1 to 5" }) }
@@ -55,10 +55,9 @@ const createReview = async function (req, res) {
     let increasedreview = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { $inc: { reviews: 1 } }, { new: true })
     return res.status(201).send({ status: true, data: reviewData })
 
-    // return res.status(201).send({status: true, message: reviewData})
-
 }
 
+// .....................Ninth Api Update Review...........................................................
 
 const updateReview = async function (req, res) {
     try {
@@ -69,23 +68,48 @@ const updateReview = async function (req, res) {
         let data = req.body
         let reviewToBeUpdated = {}
 
-        if (!isValidRequestBody(data)) { return res.status(400).send({ status: false, message: "data is required" }) }
+        if (!isValidRequestBody(data)) {
+            return res.status(400).send({ status: false, message: "data is required" })
+        }
 
-        if (!isValidObjectId(bookId)) { return res.status(400).send({ status: false, message: "enter valid bookId" }) }
-        if (!isValidObjectId(reviewId)) { return res.status(400).send({ status: false, message: "enter valid reviewId" }) }
+        if (!isValidObjectId(bookId)) {
+            return res.status(400).send({ status: false, message: "enter valid bookId" })
+        }
+
+        if (!isValidObjectId(reviewId)) {
+            return res.status(400).send({ status: false, message: "enter valid reviewId" })
+        }
+
         let booksId = await bookModel.findOne({ _id: bookId, isDeleted: false })
-        if (!booksId) { res.send("eror") }
+        if (!booksId) {
+            return res.status(400).res.send({ status: false, message: 'Please provide book Id' })
+        }
+
         let upReview = await reviewModel.findOne({ _id: reviewId, isDeleted: false })
-        if (!upReview) { return res.status(400).send({ status: false, message: "review is already deleted" }) }
+        if (!upReview) {
+            return res.status(400).send({ status: false, message: "review is already deleted" })
+        }
 
         if (isValid(data.review)) { reviewToBeUpdated['review'] = data.review }
+
+        let checkreview = await reviewModel.findOne({ review: data.review })
+        if (!checkreview) {
+            return res.status(400).send({ status: false, ERROR: "the review you want to update is already updated" })
+        }
+
         if (isValid(data.rating)) { reviewToBeUpdated['rating'] = data.rating }
-        if (!(/^[1-5]$/.test(data.rating))) { return res.status(400).send({ status: false, message: "please enter rating between 1 to 5" }) }
+
+
+        if (!(/^[1-5]$/.test(data.rating))) {
+            return res.status(400).send({ status: false, message: "please enter rating between 1 to 5" })
+        }
+
         if (isValid(data.reviewedBy)) { reviewToBeUpdated['reviewedBy'] = data.reviewedBy }
 
 
         let updatedReview = await reviewModel
-            .findOneAndUpdate({ _id: reviewId }, { review: data.review, rating: data.rating, reviewedBy: data.reviewedBy }, { new: true })
+            .findOneAndUpdate({ _id: reviewId },
+                { review: data.review, rating: data.rating, reviewedBy: data.reviewedBy }, { new: true })
 
         return res.status(202).send({ Status: "review updated successfully", updatedReview })
 

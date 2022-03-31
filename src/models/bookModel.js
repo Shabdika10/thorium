@@ -5,61 +5,61 @@ const bookSchema = new mongoose.Schema({
 
 
     title: {
-        type:String, 
-        required:true,
-        unique:true
+        type: String,
+        required: true,
+        unique: true
     },
 
     excerpt: {
         type: String,
-        requred:true
-    }, 
+        requred: true
+    },
 
     userId: {
-        type:ObjectId,
-        required:true,
+        type: ObjectId,
+        required: true,
         ref: 'createUser'
     },
 
     ISBN: {
-        type:String,
-        required:true,
-        unique:true
+        type: String,
+        required: true,
+        unique: true
     },
 
     category: {
-        type:String,
-        required:true
+        type: String,
+        required: true
     },
 
     subcategory: [{
-        type:String,  
-        required:true
+        type: String,
+        required: true
     }],
 
     reviews: {
-        type:Number,
+        type: Number,
         default: 0,
-        comment:Number
+        comment: Number
     },
     deletedAt: {
-        type:Date
-    }, 
+        type: Date
+    },
 
     isDeleted: {
         type: Boolean,
         default: false
     },
-    
+
     releasedAt: {
-        type:Date,
-        required:true,
+        type: Date,
+        required: true,
         // default:Date.now(),
-        
+
     }
 
 
-},{timestamps:true})
+}, { timestamps: true })
 
 
-  module.exports = mongoose.model('createBook', bookSchema)
+module.exports = mongoose.model('createBook', bookSchema)

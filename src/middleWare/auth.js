@@ -17,7 +17,7 @@ const authenticate = async function(req, res, next){
         return res.status(401).send({status : false, message: "authentication failed"})
         }
         // setting a key in request,  "decodedToken" which consist userId and exp.
-        req.decodedToken = decodedToken
+        // req.decodedToken = decodedToken
         
         next()
 
@@ -36,6 +36,7 @@ const authorise = async function(req, res,next){
         return res.status(400).send({status : false, message : "bookId is not valid"})
         }
 
+        
         const book = await bookModel.findOne({_id : bookId, isDeleted : false})
 
         if(!book){
