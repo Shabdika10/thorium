@@ -10,11 +10,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var multer = require('multer');  
-var upload = multer();
+// var multer = require('multer');  
+// var upload = multer();
 
-app.use(upload.array()); 
-app.use(express.static('public'));
+// app.use(upload.array()); 
+// app.use(express.static('public'));
 
 
 

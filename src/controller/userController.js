@@ -51,7 +51,7 @@ const createUser = async function (req, res) {
             return res.status(400).send({ status: false, msg: "mobile is required" })
         }
 
-        if (!(/^([+]\d{2})?\d{10}$/.test(data.phone)) {
+        if (!(/^([+]\d{2})?\d{10}$/.test(data.phone))) {
             return res.status(400).send({ status: false, msg: "please provide a valid moblie Number" })
         }
 

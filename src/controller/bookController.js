@@ -64,9 +64,10 @@ const createBook = async function (req, res) {
         if (!isValid(ISBN)) {
             return res.status(400).send({ status: false, error: 'ISBN is required' })
         }
-        if (!/^(97(8|9))?\d{9}(\d|X)$/.test(ISBN.split("-").join(""))) {
-            return res.status(400).send({ status: false, message: `enter a valid ISBN of 13 digits` })
-        }
+        // if (!/^(97(8|9))?\d{9}(\d|X)$/.test(ISBN.split("-").join(""))) {
+        //     return res.status(400).send({ status: false, message: `enter a valid ISBN of 13 digits` })
+        // }
+
 
         if (!isValid(category)) {
             return res.status(400).send({ status: false, error: 'category is required' })
@@ -119,9 +120,6 @@ const getBook = async function (req, res) {
         const query = req.query
         const filter = { isDeleted: false }
 
-
-
-
         if (isValidRequestBody(data)) {
             return res.status(400).send({ status: false, error: 'this is not allowed' })
         }
@@ -141,20 +139,28 @@ const getBook = async function (req, res) {
 
             // if (isValid(userId)) {
             //     const userid = await bookModel.find({ userId })
+            // }
+            if(req.query.category){
+                if (!isValid(req.query.category)){
+                    return res.status(400).send({status:false ,message :"Category is not valid"})
+                }
+                filter['category']= req.query.category
+            }
 
-
-
+            // if (isValid(category)) {
+            //     const cateogrised = await bookModel.find({ category })
+            //     if (cateogrised) { filter['category'] = category }
+            // }
+            // if (isValid(subcategory)) {
+            //     const subcat = await bookModel.find({ subcategory })
+            //     if (subcat) { filter['subcategory'] = subcategory }
 
             // }
-
-            if (isValid(category)) {
-                const cateogrised = await bookModel.find({ category })
-                if (cateogrised) { filter['category'] = category }
-            }
-            if (isValid(subcategory)) {
-                const subcat = await bookModel.find({ subcategory })
-                if (subcat) { filter['subcategory'] = subcategory }
-
+            if(req.query.subcategory){
+                if (!isValid(req.query.subcategory)){
+                    return res.status(400).send({status:false ,message :"subcategory is not valid"})
+                }
+                filter['subcategory']= req.query.subcategory
             }
 
         }
