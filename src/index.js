@@ -1,5 +1,6 @@
 const express = require('express');
 var bodyParser = require('body-parser');
+const multer = require('multer');
 
 
 const route = require('./routes/route.js');
@@ -15,6 +16,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // app.use(upload.array()); 
 // app.use(express.static('public'));
+
+app.use(multer().any());
 
 
 

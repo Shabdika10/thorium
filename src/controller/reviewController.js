@@ -127,7 +127,7 @@ const deleteReview = async function (req, res) {
         const reviewid = req.params.reviewId
 
         if (!isValid(bookid)) { return res.send("bookid requires") }
-        if (!isValid(reviewid)) { return res.send("bookid requires") }
+        if (!isValid(reviewid)) { return res.send("reviewedid requires") }
 
         if (!isValidRequestBody(bookid)) { return res.status(400).send({ status: false, message: 'book id is required' }) }
         if (!isValidRequestBody(reviewid)) { return res.status(400).send({ status: false, message: 'review id is required' }) }

@@ -2,6 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 
+// const router = express.Router();
+const aws = require("aws-sdk")
+
 const userController = require("../controller/userController")
 const bookController = require("../controller/bookController")
 const reviewController = require("../controller/reviewController")
@@ -33,6 +36,10 @@ router.post("/books/:bookId/review", reviewController.createReview )
 router.put("/books/:bookId/review/:reviewId", reviewController.updateReview )
 
 router.delete("/books/:bookId/review/:reviewId", reviewController.deleteReview)
+
+// .........................aws bookcover ..................................
+
+router.post("/write-file-aws" ,bookController.awsFile)
 
 module.exports = router;
 //adding this comment for nothing
